@@ -1,4 +1,4 @@
-import { useContext, useCallback, useMemo } from 'react'
+import { useContext, useCallback, useMemo, useEffect } from 'react'
 import Cookie from 'js-cookie'
 import { ThemeContext as StyledThemeContext } from 'styled-components'
 import { useTheme as useNextTheme } from 'next-themes'
@@ -22,8 +22,16 @@ const useTheme = () => {
     [setTheme],
   )
 
+  useEffect(() => {
+    handleSwitchTheme('dark')
+  }, [])
+
   return useMemo(
-    () => ({ isDark: resolvedTheme === 'dark', theme, setTheme: handleSwitchTheme }),
+    () => ({
+      isDark: true, //resolvedTheme === 'dark',
+      theme,
+      setTheme: handleSwitchTheme,
+    }),
     [theme, resolvedTheme, handleSwitchTheme],
   )
 }
