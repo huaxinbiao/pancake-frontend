@@ -166,13 +166,13 @@ export default function PoolListPage() {
     let resultSection = null
     if (v3Loading || v2Loading) {
       resultSection = (
-        <Text color="textSubtle" textAlign="center">
+        <Text color="textSubtle" textAlign="center" marginTop="34px" marginBottom="34px">
           <Dots>{t('Loading')}</Dots>
         </Text>
       )
     } else if (!v2PairsSection && !stablePairsSection && !v3PairsSection) {
       resultSection = (
-        <Text color="textSubtle" textAlign="center">
+        <Text color="textSubtle" textAlign="center" marginTop="34px" marginBottom="34px">
           {t('No liquidity found.')}
         </Text>
       )
@@ -190,9 +190,9 @@ export default function PoolListPage() {
 
   return (
     <Page>
-      <Flex m="24px 0" maxWidth="854px">
+      {/* <Flex m="24px 0" maxWidth="854px">
         <FarmV3MigrationBanner />
-      </Flex>
+      </Flex> */}
       <AppBody
         style={{
           maxWidth: '854px',

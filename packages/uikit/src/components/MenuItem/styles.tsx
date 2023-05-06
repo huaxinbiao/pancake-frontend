@@ -52,7 +52,7 @@ const StyledMenuItem = styled.a<StyledMenuItemProps>`
   `
       : `
     padding: 4px 4px 0px 4px;
-    height: 42px;
+    height: 50px;
   `}
 
   &:hover {
