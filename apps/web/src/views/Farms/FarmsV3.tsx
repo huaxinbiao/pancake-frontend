@@ -425,7 +425,7 @@ const Farms: React.FC<React.PropsWithChildren> = ({ children }) => {
 
   return (
     <FarmsV3Context.Provider value={providerValue}>
-      <PageHeader>
+      <PageHeader background="linear-gradient(90deg, #159957, #155799);">
         <Flex flexDirection="column">
           {/* <Box m="24px 0">
             <FarmV3MigrationBanner />

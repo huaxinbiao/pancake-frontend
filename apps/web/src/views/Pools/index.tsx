@@ -45,7 +45,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
 
   return (
     <>
-      <PageHeader>
+      <PageHeader background="linear-gradient(90deg, #159957, #155799);">
         <Flex justifyContent="space-between" flexDirection={['column', null, null, 'row']}>
           <Flex flex="1" flexDirection="column" mr={['8px', 0]}>
             <Heading as="h1" scale="xxl" color="secondary" mb="24px">
