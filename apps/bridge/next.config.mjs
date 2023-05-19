@@ -1,5 +1,6 @@
 import { createVanillaExtractPlugin } from '@vanilla-extract/next-plugin'
 import { withAxiom } from 'next-axiom'
+import { withWebSecurityHeaders } from '@pancakeswap/next-config/withWebSecurityHeaders'
 
 const withVanillaExtract = createVanillaExtractPlugin()
 
@@ -13,10 +14,11 @@ const nextConfig = {
     '@pancakeswap/hooks',
     '@pancakeswap/localization',
     '@pancakeswap/utils',
+    '@0xsquid/widget',
   ],
   compiler: {
     styledComponents: true,
   },
 }
 
-export default withAxiom(withVanillaExtract(nextConfig))
+export default withAxiom(withVanillaExtract(withWebSecurityHeaders(nextConfig)))

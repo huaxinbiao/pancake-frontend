@@ -28,6 +28,7 @@ import { getBlockExploreLink } from 'utils'
 import { formatAmount } from 'utils/formatInfoNumbers'
 import { CurrencyLogo, DoubleCurrencyLogo } from 'views/Info/components/CurrencyLogo'
 import BarChart from '../components/BarChart/alt'
+import LineChart from '../components/LineChart/alt'
 import { GreyBadge } from '../components/Card'
 import DensityChart from '../components/DensityChart'
 import { LocalLoader } from '../components/Loader'
@@ -340,9 +341,8 @@ const PoolPage: React.FC<{ address: string }> = ({ address }) => {
                     label={valueLabel}
                   />
                 ) : view === ChartView.TVL ? (
-                  <BarChart
+                  <LineChart
                     data={formattedTvlData}
-                    color={backgroundColor}
                     minHeight={340}
                     setValue={setLatestValue}
                     setLabel={setValueLabel}

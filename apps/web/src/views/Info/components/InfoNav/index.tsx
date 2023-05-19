@@ -8,6 +8,8 @@ import {
   UserMenuItem,
   Text,
   NextLinkFromReactRouter,
+  Message,
+  MessageText,
 } from '@pancakeswap/uikit'
 import { useCallback, useMemo } from 'react'
 import {} from 'hooks/useSwitchNetwork'
@@ -16,7 +18,7 @@ import { useTranslation } from '@pancakeswap/localization'
 import { useRouter } from 'next/router'
 import styled from 'styled-components'
 import Search from 'views/Info/components/InfoSearch'
-import { useMultiChainPath, useChainNameByQuery } from 'state/info/hooks'
+import { useMultiChainPath, useChainNameByQuery, useChainIdByQuery } from 'state/info/hooks'
 import { multiChainId, multiChainPaths } from 'state/info/constant'
 import { chains } from 'utils/wagmi'
 import { ChainLogo } from 'components/Logo/ChainLogo'
@@ -39,6 +41,7 @@ const InfoNav: React.FC<{ isStableSwap: boolean }> = ({ isStableSwap }) => {
   const { t } = useTranslation()
   const router = useRouter()
   const chainPath = useMultiChainPath()
+  const chainId = useChainIdByQuery()
   const stableSwapQuery = isStableSwap ? '?type=stableSwap' : ''
   const activeIndex = useMemo(() => {
     if (router?.pathname?.includes('/pairs')) {
@@ -50,27 +53,45 @@ const InfoNav: React.FC<{ isStableSwap: boolean }> = ({ isStableSwap }) => {
     return 0
   }, [router.pathname])
   return (
-    <NavWrapper>
-      <Flex>
-        <Box>
-          <ButtonMenu activeIndex={activeIndex} scale="sm" variant="subtle">
-            <ButtonMenuItem as={NextLinkFromReactRouter} to={`/info${chainPath}${stableSwapQuery}`}>
-              {t('Overview')}
-            </ButtonMenuItem>
-            <ButtonMenuItem as={NextLinkFromReactRouter} to={`/info${chainPath}/pairs${stableSwapQuery}`}>
-              {t('Pairs')}
-            </ButtonMenuItem>
-            <ButtonMenuItem as={NextLinkFromReactRouter} to={`/info${chainPath}/tokens${stableSwapQuery}`}>
-              {t('Tokens')}
-            </ButtonMenuItem>
-          </ButtonMenu>
+    <>
+      <NavWrapper>
+        <Flex>
+          <Box>
+            <ButtonMenu activeIndex={activeIndex} scale="sm" variant="subtle">
+              <ButtonMenuItem as={NextLinkFromReactRouter} to={`/info${chainPath}${stableSwapQuery}`}>
+                {t('Overview')}
+              </ButtonMenuItem>
+              <ButtonMenuItem as={NextLinkFromReactRouter} to={`/info${chainPath}/pairs${stableSwapQuery}`}>
+                {t('Pairs')}
+              </ButtonMenuItem>
+              <ButtonMenuItem as={NextLinkFromReactRouter} to={`/info${chainPath}/tokens${stableSwapQuery}`}>
+                {t('Tokens')}
+              </ButtonMenuItem>
+            </ButtonMenu>
+          </Box>
+          <NetworkSwitcher activeIndex={activeIndex} />
+        </Flex>
+        <Box width={['100%', '100%', '250px']}>
+          <Search />
         </Box>
-        <NetworkSwitcher activeIndex={activeIndex} />
-      </Flex>
-      <Box width={['100%', '100%', '250px']}>
-        <Search />
-      </Box>
-    </NavWrapper>
+      </NavWrapper>
+      {chainId === ChainId.BSC && !isStableSwap && (
+        <Box maxWidth="1200px" m="0 auto">
+          <Message my="24px" mx="24px" variant="warning">
+            <MessageText fontSize="17px">
+              <Text color="warning" as="span">
+                {t(
+                  'The markets for some of the newer and low-cap tokens displayed on the v2 info page are highly volatile, and as a result, token information may not be accurate.',
+                )}
+              </Text>
+              <Text color="warning" ml="4px" bold as="span">
+                {t('Before trading any token, please DYOR, and pay attention to the risk scanner.')}
+              </Text>
+            </MessageText>
+          </Message>
+        </Box>
+      )}
+    </>
   )
 }
 

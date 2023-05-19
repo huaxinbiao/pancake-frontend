@@ -1,19 +1,19 @@
 import { Currency, CurrencyAmount, Pair, Percent, Token } from '@pancakeswap/sdk'
 import { useCallback, useMemo } from 'react'
-import { useSelector } from 'react-redux'
-import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { wrappedCurrency } from 'utils/wrappedCurrency'
 import { useV2Pair } from 'hooks/usePairs'
 import useTotalSupply from 'hooks/useTotalSupply'
 
 import { useTranslation } from '@pancakeswap/localization'
 import tryParseAmount from '@pancakeswap/utils/tryParseAmount'
-import { AppState, useAppDispatch } from '../index'
+import { useAtom, useAtomValue } from 'jotai'
+import { burnReducerAtom } from 'state/burn/reducer'
+import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import { useTokenBalances } from '../wallet/hooks'
 import { Field, typeInput } from './actions'
 
-export function useBurnState(): AppState['burn'] {
-  return useSelector<AppState, AppState['burn']>((state) => state.burn)
+export function useBurnState() {
+  return useAtomValue(burnReducerAtom)
 }
 
 export function useDerivedBurnInfo(
@@ -34,7 +34,7 @@ export function useDerivedBurnInfo(
   tokenToReceive?: string
   estimateZapOutAmount?: CurrencyAmount<Token>
 } {
-  const { account, chainId } = useActiveWeb3React()
+  const { account, chainId } = useAccountActiveChain()
 
   const { independentField, typedValue } = useBurnState()
 
@@ -141,7 +141,7 @@ export function useDerivedBurnInfo(
     [Field.LIQUIDITY]: liquidityToRemove,
     [Field.CURRENCY_A]: !zapMode
       ? amountA
-      : amountA && removalCheckedA && !removalCheckedB && estimateZapOutAmount
+      : amountA && removalCheckedA && !removalCheckedB && estimateZapOutAmount && liquidityValueA
       ? CurrencyAmount.fromRawAmount(
           tokenA,
           percentToRemove.multiply(liquidityValueA.quotient).quotient + estimateZapOutAmount.quotient,
@@ -151,7 +151,7 @@ export function useDerivedBurnInfo(
       : amountA,
     [Field.CURRENCY_B]: !zapMode
       ? amountB
-      : amountB && removalCheckedB && !removalCheckedA && estimateZapOutAmount
+      : amountB && removalCheckedB && !removalCheckedA && estimateZapOutAmount && liquidityValueB
       ? CurrencyAmount.fromRawAmount(
           tokenB,
           percentToRemove.multiply(liquidityValueB.quotient).quotient + estimateZapOutAmount.quotient,
@@ -180,7 +180,7 @@ export function useDerivedBurnInfo(
 export function useBurnActionHandlers(): {
   onUserInput: (field: Field, typedValue: string) => void
 } {
-  const dispatch = useAppDispatch()
+  const [, dispatch] = useAtom(burnReducerAtom)
 
   const onUserInput = useCallback(
     (field: Field, typedValue: string) => {
